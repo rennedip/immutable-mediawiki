@@ -1,0 +1,1 @@
+Immutable deployment of MediaWiki
