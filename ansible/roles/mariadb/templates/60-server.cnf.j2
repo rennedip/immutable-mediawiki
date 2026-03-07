@@ -1,0 +1,68 @@
+[mysql]
+socket = {{ mariadb_socket_file }}
+
+[mysqld]
+skip-networking
+user = {{ mariadb_user }}
+socket = {{ mariadb_socket_file }}
+
+datadir = /var/lib/mysql
+tmpdir = /tmp
+pid-file = /var/run/mysqld/mysqld.pid
+
+# Authentication
+plugin_load_add = auth_ed25519
+
+# SQL
+sql-mode = STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_AUTO_VALUE_ON_ZERO,NO_ENGINE_SUBSTITUTION,NO_ZERO_DATE,NO_ZERO_IN_DATE
+transaction_isolation = REPEATABLE-READ
+
+# Limits
+thread_handling = pool-of-threads
+thread_pool_stall_limit = 10
+thread_pool_size = 32
+thread_pool_max_threads = 2000
+max-connections = 1000
+max-connect-errors = 1000
+back_log = 500
+query-cache-type = 0
+query-cache-size = 0
+thread_cache_size = 300
+interactive_timeout = 28800
+wait_timeout = 3600
+tmp_table_size = 64M
+max_heap_table_size = 64M
+open_files_limit = 200000
+table_open_cache = 200000
+table_definition_cache = 200000
+join_cache_level = 8
+max-allowed-packet = 64M
+
+# Storage engine
+innodb_flush_neighbors = 0
+innodb_io_capacity = 1000
+innodb_stats_method = nulls_unequal
+innodb_log_file_size = 2G
+innodb_flush_log_at_trx_commit = 1
+innodb_buffer_pool_size = 4G
+innodb-stats-on-metadata = OFF
+innodb_ft_cache_size = 200000000
+innodb_ft_total_cache_size = 640000000
+innodb_adaptive_hash_index = OFF
+innodb_max_dirty_pages_pct = 75
+innodb_purge_threads = 1
+aria_pagecache_buffer_size = 1G
+
+# Performance
+userstat = 1
+plugin_load_add = query_response_time
+query_response_time_stats = ON
+optimizer_switch = 'mrr=on,mrr_cost_based=on,mrr_sort_keys=on,optimize_join_buffer_size=on,rowid_filter=off'
+performance_schema = off
+
+# Security
+safe-user-create = ON
+skip-symbolic-links = ON
+local-infile = OFF
+allow-suspicious-udfs = OFF
+automatic-sp-privileges = OFF

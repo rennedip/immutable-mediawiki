@@ -1,0 +1,32 @@
+# Configuration
+
+[DEFAULT]
+ignoreself = true ; Whether local IPs should be ignored
+bantime = 1h ; Ban duration
+findtime = 10m ; Time during which offenses are counted for an action
+maxretry = 3 ; Number of failures before a ban
+
+
+# Jails
+
+[sshd]
+enabled = true
+mode = aggressive
+maxretry = 3
+findtime = 10m
+bantime = 24h
+
+[apache-badbots]
+enabled = true
+
+[apache-noscript]
+enabled = true
+
+[apache-overflows]
+enabled = true
+
+[apache-nohome]
+enabled = true
+
+[grafana]
+enabled = true

@@ -1,0 +1,20 @@
+---
+
+mediawiki_version: "1.45"
+mediawiki_minor_version: "1.45.1"
+mediawiki_checksum: sha256:E2F126B19AEC422051A0A50E0C6AB7E904F33B3988A47B9DA8AFBFD0C0A252CC
+mediawiki_dir: "{{ apache_webroot }}/mediawiki"
+mediawiki_private_config_dir: /etc/mediawiki
+mediawiki_extensions:
+  Citizen:
+    version: main
+    dest: skins/Citizen
+    repo: "https://github.com/StarCitizenTools/mediawiki-skins-Citizen"
+  Cosmos:
+    version: master
+    dest: skins/Cosmos
+    repo: "https://github.com/wikimedia/mediawiki-skins-Cosmos"
+  PortableInfobox:
+    version: main
+    dest: extensions/PortableInfobox
+    repo: "https://github.com/Universal-Omega/PortableInfobox"

@@ -1,0 +1,42 @@
+---
+
+- name: Install ufw
+  ansible.builtin.apt:
+    name: ufw
+    state: present
+
+- name: Allow SSH
+  community.general.ufw:
+    port: ssh
+    proto: tcp
+    rule: allow
+  notify: Restart ufw
+
+- name: Allow HTTP
+  community.general.ufw:
+    port: 80
+    proto: tcp
+    rule: allow
+  notify: Restart ufw
+
+- name: Allow HTTPS
+  community.general.ufw:
+    port: 443
+    proto: tcp
+    rule: allow
+  notify: Restart ufw
+
+- name: Allow DNS
+  community.general.ufw:
+    port: 53
+    proto: tcp
+    rule: allow
+  notify: Restart ufw
+
+- name: Enable UFW
+  community.general.ufw:
+    state: enabled
+    default: deny
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers

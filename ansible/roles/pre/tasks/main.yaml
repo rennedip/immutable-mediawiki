@@ -1,0 +1,43 @@
+---
+
+- name: Install Python virtual environments
+  ansible.builtin.apt:
+    name: python3-venv
+
+- name: Set up virtual environment
+  ansible.builtin.pip:
+    name:
+      - packaging
+    virtualenv: "{{ pre_ansible_venv_dir }}"
+    virtualenv_command: "python3 -m venv"
+
+- name: Start using the virtual environment
+  ansible.builtin.set_fact:
+    ansible_python_interpreter: "{{ pre_ansible_venv_dir }}/bin/python"
+
+- name: Reset connection
+  ansible.builtin.meta: reset_connection
+
+- name: Update repositories
+  ansible.builtin.apt:
+    update_cache: true
+    upgrade: safe
+    autoremove: true
+
+- name: Create Ansible local facts directory
+  ansible.builtin.file:
+    path: "{{ pre_ansible_local_fact_dir }}"
+    state: directory
+    mode: "0750"
+    owner: root
+    group: root
+
+- name: Install ACL
+  ansible.builtin.apt:
+    name: acl
+    state: present
+
+- name: Install git
+  ansible.builtin.apt:
+    name: git
+    state: present

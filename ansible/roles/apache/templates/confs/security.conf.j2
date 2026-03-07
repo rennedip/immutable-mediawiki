@@ -1,0 +1,16 @@
+<Directory />
+	Options -FollowSymLinks -ExecCGI -Includes -Indexes
+	AllowOverride None
+	Require all denied
+</Directory>
+
+<Directory /var/www/>
+	Options -FollowSymLinks -ExecCGI -Includes -Indexes
+	AllowOverride None
+	Require all denied
+</Directory>
+
+RedirectMatch 404 /\.git
+RedirectMatch 404 /\.svn
+
+TraceEnable Off

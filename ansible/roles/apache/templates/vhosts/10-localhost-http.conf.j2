@@ -1,0 +1,10 @@
+<VirtualHost *:80>
+	ServerName localhost
+
+	# Server status
+	<Location "/server-status">
+		SetHandler server-status
+		Require local
+	</Location>
+
+</VirtualHost>

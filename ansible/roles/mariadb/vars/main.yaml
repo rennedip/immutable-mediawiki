@@ -1,0 +1,6 @@
+---
+
+mariadb_user: mysql
+mariadb_config_dir: /etc/mysql
+mariadb_log_dir: /var/log/mysql
+mariadb_socket_file: /run/mysqld/mysqld.sock

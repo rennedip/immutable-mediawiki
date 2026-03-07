@@ -1,0 +1,67 @@
+---
+
+- name: Install dependencies
+  ansible.builtin.pip:
+    name: python-debian
+    state: present
+
+- name: Create system groups
+  ansible.builtin.group:
+    name: "{{ item.name }}"
+    system: true
+    state: "{{ item.state }}"
+  loop: "{{ accounts_system_groups }}"
+
+- name: Create system users
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    group: "{{ item.group }}"
+    groups: "{{ item.groups }}"
+    append: true
+    home: "{{ item.home }}"
+    create_home: false
+    system: true
+    comment: "{{ item.comment }}"
+    state: "{{ item.state }}"
+  loop: "{{ accounts_system_users }}"
+
+- name: Create groups
+  ansible.builtin.group:
+    name: "{{ item.name }}"
+    gid: "{{ item.gid }}"
+    state: "{{ item.state }}"
+  loop: "{{ accounts_groups }}"
+
+- name: Create users
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    uid: "{{ item.uid }}"
+    group: "{{ item.group }}"
+    shell: /bin/bash
+    create_home: true
+    state: "{{ item.state }}"
+  loop: "{{ accounts_users }}"
+
+- name: Create sudoer files
+  ansible.builtin.template:
+    src: templates/sudoer.j2
+    dest: /etc/sudoers.d/{{ item.name }}
+    validate: /usr/sbin/visudo -csf %s
+    mode: "0440"
+    owner: root
+    group: root
+  loop: "{{ accounts_users }}"
+  when: item.sudo is defined
+
+- name: Add SSH keys
+  ansible.builtin.template:
+    src: templates/authorized_user.j2
+    dest: "{{ sshd_key_directory }}/{{ item.name }}"
+    owner: root
+    group: root
+    mode: "0644"
+  loop: "{{ accounts_users }}"
+  when: item.ssh_key is defined
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers

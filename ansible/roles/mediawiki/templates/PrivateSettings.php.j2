@@ -1,0 +1,14 @@
+<?php
+
+## Database
+$wgDBtype = "mysql";
+$wgDBserver = "localhost";
+$wgDBname = "wikidb";
+$wgDBuser = "wikiuser";
+$wgDBpassword = "{{ mariadb_secrets['secrets']['mariadb_wikiuser_password'] }}";
+$wgDBadminuser = "wikiadmin";
+$wgDBadminpassword = "{{  mariadb_secrets['secrets']['mariadb_wikiadmin_password'] }}";
+
+## Keys
+$wgSecretKey = "{{ mediawiki_secrets['secrets']['mediawiki_secret_key'] }}";
+$wgUpgradeKey = "{{ mediawiki_secrets['secrets']['mediawiki_upgrade_key'] }}";

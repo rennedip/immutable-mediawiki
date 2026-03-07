@@ -1,0 +1,38 @@
+name: ansible-lint
+on:
+  push:
+    branches:
+      - dev
+jobs:
+  lint:
+    name: Ansible Lint
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up secrets
+        run: |
+          mkdir -p ~/.keys
+          touch ~/.keys/mediawiki.pass
+          echo -e 'placeholder' > ~/.keys/mediawiki.pass
+          mkdir -p ~/.secrets
+          touch ~/.secrets/dev/main.yaml && echo 'placeholder' > ~/.secrets/dev/main.yaml
+          touch ~/.secrets/domain.cert.pem && echo 'placeholder' > ~/.secrets/domain.cert.pem
+          touch ~/.secrets/private.key.pem && echo 'placeholder' > ~/.secrets/private.key.pem
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+
+      - name: Install Ansible
+        run: pip install ansible-dev-tools
+
+      - name: Create collections directory
+        run: |
+          mkdir -p ./collections
+
+      - name: Install collections
+        run: ansible-galaxy install -r requirements.yaml --force
+
+      - name: Run Ansible Lint
+        run: ansible-lint

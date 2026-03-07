@@ -1,0 +1,43 @@
+---
+
+accounts_system_groups:
+  - name: prometheus
+    state: present
+
+accounts_system_users:
+  - name: prometheus
+    group: prometheus
+    groups:
+      - adm
+    home: /var/lib/prometheus
+    comment: "Prometheus daemon"
+    state: present
+
+accounts_groups:
+  - name: mediawiki
+    gid: 1001
+    state: present
+  - name: ansible
+    gid: 1002
+    state: present
+  - name: devs
+    gid: 1003
+    state: present
+
+accounts_users:
+  - name: mediawiki
+    uid: 1001
+    group: mediawiki
+    state: present
+  - name: ansible
+    uid: 1002
+    group: ansible
+    sudo: "ALL=(ALL:ALL) NOPASSWD:ALL"
+    ssh_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID8yRBgPWnp0V/AiblPJN+kpA1zCNU/Y0+LU+idA7x8N"
+    state: present
+  - name: bluetangerine
+    uid: 1003
+    group: devs
+    sudo: "ALL=(ALL:ALL) NOPASSWD:ALL"
+    state: present
+    ssh_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH2qsYlxnmhehVYkUbXh5SAM4YUMei+hWWXGJvmsGPpI"

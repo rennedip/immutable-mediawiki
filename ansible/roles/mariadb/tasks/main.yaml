@@ -1,0 +1,130 @@
+---
+
+- name: Read mariadb secrets
+  infisical.vault.read_secrets:
+    login_data: "{{ infisical_session.login_data }}"
+    project_id: "{{ infisical_project_id }}"
+    env_slug: "{{ env }}"
+    path: "/mariadb/"
+    as_dict: true
+  register: mariadb_secrets_initial
+  no_log: true
+
+- name: Rotate mariadb secrets
+  infisical.vault.update_secret:
+    login_data: "{{ infisical_session.login_data }}"
+    project_id: "{{ infisical_project_id }}"
+    env_slug: "{{ env }}"
+    path: "/mariadb/"
+    secret_name: "{{ item.key }}"
+    secret_value: "{{ lookup('community.general.random_string', length=64, upper=true, numbers=true, special=false) }}"
+  loop: "{{ mariadb_secrets.secrets | dict2items }}"
+  when: rotate_secrets is defined
+  no_log: true
+
+- name: Reread mariadb secrets
+  infisical.vault.read_secrets:
+    login_data: "{{ infisical_session.login_data }}"
+    project_id: "{{ infisical_project_id }}"
+    env_slug: "{{ env }}"
+    path: "/mariadb/"
+    as_dict: true
+  register: mariadb_secrets_rotated
+  when: rotate_secrets is defined
+  no_log: true
+
+- name: Set final secrets
+  ansible.builtin.set_fact:
+    mariadb_secrets: "{{ mariadb_secrets_rotated if rotate_secrets is defined else mariadb_secrets_initial }}"
+
+- name: Install pymysql
+  ansible.builtin.pip:
+    name: pymysql
+    state: present
+
+- name: Install mariadb
+  ansible.builtin.apt:
+    name: mariadb-server
+    state: present
+
+- name: Configure mariadb
+  ansible.builtin.template:
+    src: templates/60-server.cnf.j2
+    dest: "{{ mariadb_config_dir }}/mariadb.conf.d/60-server.cnf"
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart mariadb
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers
+
+- name: Start mariadb
+  ansible.builtin.service:
+    name: mariadb
+    state: started
+    enabled: true
+
+- name: Create root user
+  community.mysql.mysql_user:
+    name: root
+    plugin: unix_socket
+    state: present
+    host_all: true
+    login_unix_socket: "{{ mariadb_socket_file }}"
+    login_user: root
+
+- name: Configure users
+  community.mysql.mysql_user:
+    name: "{{ item.name }}"
+    password: "{{ item.password | default(omit) }}"
+    priv: "{{ item.priv | default(omit) }}"
+    resource_limits: "{{ item.resource_limits | default(omit) }}"
+    state: "{{ item.state }}"
+    login_unix_socket: "{{ mariadb_socket_file }}"
+    login_user: root
+  loop:
+    - name: wikiuser
+      password: "{{ mariadb_secrets.secrets.mariadb_wikiuser_password }}"
+      priv: "wikidb.*:SELECT,INSERT,UPDATE,DELETE"
+      state: present
+    - name: wikiadmin
+      password: "{{ mariadb_secrets.secrets.mariadb_wikiadmin_password }}"
+      priv: "wikidb.*:all"
+      state: present
+    - name: exporteruser
+      password: "{{ mariadb_secrets.secrets.mariadb_exporteruser_password }}"
+      priv: "*.*:PROCESS,REPLICATION CLIENT,SELECT,SLAVE MONITOR"
+      resource_limits:
+        MAX_USER_CONNECTIONS: 3
+      state: present
+    - name: grafanauser
+      state: absent
+  no_log: true
+
+- name: Configure databases
+  community.mysql.mysql_db:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+    login_unix_socket: "{{ mariadb_socket_file }}"
+    login_user: root
+  loop:
+    - name: wikidb
+      state: present
+    - name: grafanadb
+      state: absent
+
+- name: Delete test database
+  community.mysql.mysql_db:
+    name: test
+    state: absent
+    login_unix_socket: "{{ mariadb_socket_file }}"
+    login_user: root
+
+- name: Delete anonymous users
+  community.mysql.mysql_user:
+    name: ""
+    state: absent
+    host_all: true
+    login_unix_socket: "{{ mariadb_socket_file }}"
+    login_user: root

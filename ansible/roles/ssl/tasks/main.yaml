@@ -1,0 +1,23 @@
+---
+
+- name: Install ssl-cert
+  ansible.builtin.apt:
+    name: ssl-cert
+    state: present
+
+- name: Copy domain certificate
+  ansible.builtin.copy:
+    src: ~/.secrets/{{ env }}/domain.cert.pem
+    dest: "{{ ssl_cert_file }}"
+    owner: root
+    group: ssl-cert
+    mode: "0666"
+
+- name: Copy private key
+  ansible.builtin.copy:
+    src: ~/.secrets/{{ env }}/private.key.pem
+    dest: "{{ ssl_key_file }}"
+    owner: root
+    group: ssl-cert
+    mode: "0640"
+  no_log: true

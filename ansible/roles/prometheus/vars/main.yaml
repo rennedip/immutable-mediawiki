@@ -1,0 +1,15 @@
+---
+
+prometheus_version: 3.5.1
+prometheus_checksum: sha256:cd6aea0ab214b05838470668dfcee7d01a7d91913509a227b00401ca872423f0
+prometheus_install_dir: /usr/bin
+prometheus_data_dir: /data/prometheus
+prometheus_config_dir: /etc/prometheus
+prometheus_exporter_install_dir: /opt
+prometheus_exporters:
+  - name: prometheus-node-exporter
+  - name: prometheus-apache-exporter
+    args: '--scrape_uri="http://localhost/server-status?auto"'
+  - name: prometheus-mysqld-exporter
+    config_name: prometheus-mysqld-exporter.cnf
+    args: "--config.my-cnf=/etc/prometheus/prometheus-mysqld-exporter.cnf"

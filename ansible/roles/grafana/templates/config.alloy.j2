@@ -1,0 +1,161 @@
+loki.write "default" {
+    endpoint {
+        url = "http://localhost:3100/loki/api/v1/push"
+    }
+}
+
+local.file_match "logs_apache_error" {
+    path_targets = [{
+        __path__ = "/var/log/apache2/error.log",
+        job = "apache",
+    }]
+}
+
+loki.process "logs_apache_error" {
+    forward_to = [loki.write.default.receiver]
+
+    stage.regex {
+        expression = `^\[[^ ]* (?P<timestamp>[^\]]*)\] \[(?:(?P<module>[^:\]]+):)?(?P<level>[^\]]+)\](?: \[pid (?P<pid>[^\]]*)\])?(?: \[client (?P<client>[^\]]*)\])? (?P<message>.*)$`
+    }
+
+    stage.labels {
+        values = {
+            level  = null,
+            module = null,
+        }
+    }
+
+    stage.static_labels {
+        values = {
+            logtype = "error",
+        }
+    }
+}
+
+loki.source.file "logs_apache_error" {
+    targets = local.file_match.logs_apache_error.targets
+    forward_to = [loki.process.logs_apache_error.receiver]
+}
+
+local.file_match "logs_apache_access" {
+    path_targets = [{
+        __path__ = "/var/log/apache2/access.log",
+        job = "apache",
+    }]
+}
+
+loki.process "logs_apache_access" {
+    forward_to = [loki.write.default.receiver]
+
+    stage.regex {
+        expression = `^(?P<ip>[^ ]*) [^ ]* (?P<user>[^ ]*) \[(?P<timestamp>[^\]]*)\] \"(?P<method>\S+)(?: +(?P<path>[^ ]*) +\S*)?\" (?P<code>[^ ]*) (?P<size>[^ ]*)(?: \"(?P<referer>[^\\"]*)\" \"(?P<agent>.*)\")?$`
+    }
+
+    stage.metrics { 
+        metric.histogram {
+            name = "response_http_codes"
+            description = "Apache responses by HTTP codes"
+            source = "code"
+            prefix = "apache_"
+            buckets = [199,299,399,499,599]
+        }
+    }
+
+    stage.labels {
+        values = {
+            method = null,
+        }
+    }
+
+    stage.static_labels {
+        values = {
+            logtype = "access",
+        }
+    }
+}
+
+loki.source.file "logs_apache_access" {
+    targets = local.file_match.logs_apache_access.targets
+    forward_to = [loki.process.logs_apache_access.receiver]
+}
+
+loki.process "logs_mariadb" {
+  forward_to = [loki.write.default.receiver]
+
+  stage.regex {
+    expression = `^(?:(?P<timestamp>\S+\s+\S+)\s+\d\s+(?:\[(?P<level>\w+)\])\s+(?:(?P<source>\w+):)?\s*)?(?P<message>.+)$`
+  }
+
+  stage.labels {
+    values = {
+      level = "",
+      source = "",
+    }
+  }
+
+  stage.drop {
+    drop_counter_reason = "drop empty lines"
+    expression = "^ *$"
+  }
+}
+
+loki.source.journal "logs_mariadb" {
+  matches = "_SYSTEMD_UNIT=mariadb.service"
+  forward_to = [loki.process.logs_mariadb.receiver]
+  labels = {job = "mariadb"}
+}
+
+local.file_match "logs_fail2ban" {
+    path_targets = [{
+        __path__ = "/var/log/fail2ban.log",
+        job = "fail2ban",
+    }]
+}
+
+loki.process "logs_fail2ban" {
+  forward_to = [loki.write.default.receiver]
+
+  stage.regex {
+    expression = `^(?P<timestamp>\S+ \S+)\s+(?P<source>\w+.\w+)\s+\[(?P<processid>\d+)\]:\s+(?P<level>\w+)\s+(?:\[(?P<jail>\w+)\]\s+)?(?P<message>.+)$`
+  }
+
+  stage.labels {
+    values = {
+      level = "",
+      jail = "",
+    }
+  }
+
+}
+
+loki.source.file "logs_fail2ban" {
+    targets = local.file_match.logs_fail2ban.targets
+    forward_to = [loki.process.logs_fail2ban.receiver]
+}
+
+loki.source.journal "logs_sshd" {
+  matches = "_SYSTEMD_UNIT=ssh.service"
+  forward_to = [loki.write.default.receiver]
+  labels = {job = "sshd"}
+}
+
+loki.source.journal "logs_kernel" {
+  matches = "SYSLOG_IDENTIFIER=kernel"
+  forward_to = [loki.write.default.receiver]
+  labels = {job = "kernel"}
+}
+
+otelcol.receiver.otlp "mediawiki" {
+    http {
+        endpoint = "localhost:4318"
+    }
+
+    output {
+        traces = [otelcol.exporter.otlphttp.receiver]
+    }
+}
+
+otelcol.exporter.otlphttp "tempo" {
+    client {
+        endpoint = "http://tempo:4319"
+}

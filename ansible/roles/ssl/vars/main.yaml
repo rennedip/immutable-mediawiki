@@ -1,0 +1,5 @@
+---
+
+ssl_config_dir: /etc/ssl
+ssl_cert_file: "{{ ssl_config_dir }}/certs/domain.cert.pem"
+ssl_key_file: "{{ ssl_config_dir }}/private/private.key.pem"

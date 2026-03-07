@@ -1,0 +1,4 @@
+---
+
+pre_ansible_venv_dir: /opt/ansible-venv
+pre_ansible_local_fact_dir: /etc/ansible/facts.d
