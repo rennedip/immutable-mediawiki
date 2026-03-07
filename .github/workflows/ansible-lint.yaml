@@ -10,10 +10,6 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - name: Change working directory
-        run: |
-          cd ./ansible
-
       - name: Set up secrets
         run: |
           mkdir -p ~/.keys
@@ -40,3 +36,6 @@ jobs:
 
       - name: Run Ansible Lint
         run: ansible-lint
+defaults:
+  run:
+    working-directory: ./ansible
