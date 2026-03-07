@@ -1,6 +1,0 @@
-{
-    "ansible.python.interpreterPath": "/bin/python3",
-    "yaml.schemas": {
-        "https://www.schemastore.org/yamllint.json": "file:///workspaces/V3/roles/grafana/files/datasources/loki.yaml"
-    }
-}
