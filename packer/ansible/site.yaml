@@ -1,0 +1,7 @@
+---
+
+- name: Deploy to control plane
+  import_playbook: control_plane.yaml
+
+- name: Deploy to workers
+  import_playbook: worker.yaml

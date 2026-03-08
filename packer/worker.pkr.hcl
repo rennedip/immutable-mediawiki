@@ -4,14 +4,6 @@ packer {
             version = ">= 1.0.4"
             source  = "github.com/digitalocean/digitalocean"
         }
-        ansible = {
-            version = "~> 1"
-            source = "github.com/hashicorp/ansible"
-        }
-        docker = {
-            source  = "github.com/hashicorp/docker"
-            version = "~> 1"
-        }
     }
 }
 
@@ -30,15 +22,15 @@ build {
         playbook_file = "./playbook.yml"
     }
 
-    post-processor "docker-import" {
-        repository = "ghcr.io/username/db"
-        tag = "0.1"
-    }
-
-    post-processor "docker-push" {
-        login = true
-        login_server = "ghcr.io"
-        login_username = "username"
-        login_password = "password"
+    post-processor "digitalocean-import" {
+        api_token         = "{{user `token`}}"
+        spaces_key        = "{{user `key`}}"
+        spaces_secret     = "{{user `secret`}}"
+        spaces_region     = "nyc3"
+        space_name        = "import-bucket"
+        image_name        = "ubuntu-18.10-minimal-amd64"
+        image_description = "Packer import {{timestamp}}"
+        image_regions     = ["nyc3", "nyc2"]
+        image_tags        = ["custom", "packer"]
     }
 }

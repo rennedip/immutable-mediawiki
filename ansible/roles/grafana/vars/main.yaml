@@ -1,6 +1,0 @@
----
-
-grafana_loki_config_dir: /etc/loki
-grafana_alloy_config_dir: /etc/alloy
-grafana_config_dir: /etc/grafana
-grafana_provision_dir: "{{ grafana_config_dir }}/provisioning"

@@ -1,8 +1,0 @@
----
-
-- name: Install PHP and Composer
-  ansible.builtin.apt:
-    name:
-      - php
-      - composer
-    state: present

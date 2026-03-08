@@ -1,4 +1,0 @@
----
-
-- name: Deploy
-  import_playbook: server.yaml
