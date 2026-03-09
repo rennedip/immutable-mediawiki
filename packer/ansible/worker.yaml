@@ -1,19 +1,11 @@
 ---
 
-- name: Deploy to servers
+- name: Deploy to workers
   become: true
   hosts: all
   roles:
     - pre
-    - infisical
     - sshd
     - accounts
-    - mariadb
-    - ssl
-    - php
-    - apache
-    - mediawiki
-    - prometheus
-    - grafana
     - ufw
     - fail2ban

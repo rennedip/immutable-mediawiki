@@ -23,6 +23,8 @@ jobs:
       matrix:
         image:
           - mediawiki
+          - apache
+          - mariadb
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6

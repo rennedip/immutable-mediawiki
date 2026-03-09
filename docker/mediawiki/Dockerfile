@@ -1,1 +1,1 @@
-FROM dhi.io/mediawiki:1-debian13-php-fpm-dev
+FROM dhi.io/mediawiki:1.45.1-debian13-php-fpm

@@ -1,0 +1,11 @@
+---
+
+- name: Deploy to control plane
+  become: true
+  hosts: all
+  roles:
+    - pre
+    - sshd
+    - accounts
+    - ufw
+    - fail2ban
