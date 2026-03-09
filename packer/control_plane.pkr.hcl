@@ -23,7 +23,7 @@ build {
     sources = ["source.digitalocean.example"]
 
     provisioner "ansible" {
-        playbook_file = "./playbook.yml"
+        playbook_file = "./ansible/control_plane.yaml"
     }
 
     post-processor "digitalocean-import" {
