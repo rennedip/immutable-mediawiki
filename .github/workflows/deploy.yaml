@@ -24,7 +24,7 @@ jobs:
         image:
           - mediawiki
           - apache
-          - mariadb
+          - mysql
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
