@@ -4,8 +4,8 @@ on:
     branches:
       - main
 jobs:
-  lint:
-    name: Ansible Lint
+  validate:
+    name: Packer Validate
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
@@ -15,10 +15,10 @@ jobs:
           version: "1.15.0"
 
       - name: Initialize Packer project
-        run: packer init
+        run: packer init .
 
       - name: Run Packer Validate
-        run: packer validate
+        run: packer validate .
 defaults:
   run:
     working-directory: ./packer

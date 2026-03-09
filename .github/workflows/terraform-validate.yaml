@@ -4,8 +4,8 @@ on:
     branches:
       - main
 jobs:
-  lint:
-    name: Ansible Lint
+  validate:
+    name: Terraform Validate
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
