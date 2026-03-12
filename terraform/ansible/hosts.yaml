@@ -1,0 +1,29 @@
+---
+
+plugin: digitalocean.cloud.droplets
+attributes:
+  - id
+  - memory
+  - vcpus
+  - disk
+  - locked
+  - status
+  - kernel
+  - created_at
+  - features
+  - backup_ids
+  - next_backup_window
+  - snapshot_ids
+  - image
+  - volume_ids
+  - size
+  - size_slug
+  - networks
+  - region
+  - tags
+  - vpc_uuid
+keyed_groups:
+  - key: do_tags
+  - key: region.slug
+    prefix: region
+    separator: "_"

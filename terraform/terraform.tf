@@ -36,6 +36,7 @@ resource "digitalocean_droplet" "control_plane" {
     image = data.digitalocean_image.debian.id
     vpc_uuid = digitalocean_vpc.main.id
     ssh_keys = [ 54650135 ]
+    tags = [ "kube_control_plane", "etcd" ]
 }
 
 resource "digitalocean_droplet" "worker" {
@@ -46,4 +47,5 @@ resource "digitalocean_droplet" "worker" {
     image = data.digitalocean_image.debian.id
     vpc_uuid = digitalocean_vpc.main.id
     ssh_keys = [ 54650135 ]
+    tags = [ "kube_node" ]
 }
