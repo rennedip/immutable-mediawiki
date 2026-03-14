@@ -1,0 +1,6 @@
+---
+
+collections:
+- name: https://github.com/kubernetes-sigs/kubespray
+  type: git
+  version: v2.30.0

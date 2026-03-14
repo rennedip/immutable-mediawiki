@@ -7,3 +7,6 @@ NOTES.MD
 *.tfstate.*
 *.tfvars
 *.tfvars.json
+
+# Ansible
+collections/
