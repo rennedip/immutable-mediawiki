@@ -8,7 +8,7 @@
 	"remoteUser": "root",
 	"postCreateCommand": "chmod -R o-w /workspaces/${localWorkspaceFolderBasename} && chmod -R u+rwX,go= /root/.ssh",
 	"mounts": [
-		"source=${localEnv:HOME}/.ssh,target=/root/.ssh,type=bind,consistency=cached"
+		"source=${localEnv:USERPROFILE}/.ssh,target=/root/.ssh,type=bind,consistency=cached"
 	],
 	"containerEnv": {
 		"DIGITALOCEAN_TOKEN": "${localEnv:DIGITALOCEAN_TOKEN}"

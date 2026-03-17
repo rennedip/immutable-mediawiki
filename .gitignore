@@ -1,5 +1,3 @@
-NOTES.MD
-
 # Terraform
 .terraform/
 *.tfplan
@@ -10,3 +8,7 @@ NOTES.MD
 
 # Ansible
 collections/
+
+# Other
+NOTES.MD
+sandbox/
