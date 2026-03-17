@@ -13,20 +13,22 @@ jobs:
         image:
           - control_plane
           - worker
+    defaults:
+      run:
+        working-directory: ./packer
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout repository
+        uses: actions/checkout@v6
 
-      - uses: hashicorp/setup-packer@v3
+      - name: Set up Packer
+        uses: hashicorp/setup-packer@v3
         with:
           version: "1.15.0"
 
       - name: Initialize Packer project
-        run: packer init ./${{ matrix.image }}.pkr.hcl
+        run: packer init .
 
       - name: Run Packer Validate
         env:
           DIGITALOCEAN_API_TOKEN: hello
-        run: packer validate ./${{ matrix.image }}.pkr.hcl
-defaults:
-  run:
-    working-directory: ./packer
+        run: packer validate .

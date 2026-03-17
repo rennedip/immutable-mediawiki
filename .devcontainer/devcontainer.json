@@ -3,8 +3,6 @@
 	"build": {
 		"dockerfile": "Dockerfile"
 	},
-
-
 	"remoteUser": "root",
 	"postCreateCommand": "chmod -R o-w /workspaces/${localWorkspaceFolderBasename} && chmod -R u+rwX,go= /root/.ssh",
 	"mounts": [
