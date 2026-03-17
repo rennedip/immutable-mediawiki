@@ -17,7 +17,7 @@ jobs:
 
       - name: Prepare repository
         run: |
-          touch ~/.ssh/test.pub
+          mkdir -p ~/.ssh/ && touch ~/.ssh/test.pub
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
