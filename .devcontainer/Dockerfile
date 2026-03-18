@@ -1,4 +1,5 @@
 FROM mcr.microsoft.com/devcontainers/base:trixie
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN sudo apt-get update && sudo apt-get install -y apt-transport-https ca-certificates curl gnupg
 RUN curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.35/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 RUN sudo chmod 644 /etc/apt/keyrings/kubernetes-apt-keyring.gpg

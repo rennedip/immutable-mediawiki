@@ -8,11 +8,6 @@ jobs:
   validate:
     name: Packer Validate
     runs-on: ubuntu-24.04
-    strategy:
-      matrix:
-        image:
-          - control_plane
-          - worker
     defaults:
       run:
         working-directory: ./packer

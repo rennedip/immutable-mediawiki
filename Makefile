@@ -1,3 +1,5 @@
+.PHONY: init deploy ansible destroy
+
 init:
 	cd ./terraform && terraform init
 	cd ./terraform/ansible && ansible-galaxy install -r requirements.yaml

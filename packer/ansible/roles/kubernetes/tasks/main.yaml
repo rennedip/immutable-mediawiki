@@ -3,7 +3,7 @@
 - name: Install Kubernetes repository and key
   ansible.builtin.deb822_repository:
     name: kubernetes
-    type: deb
+    types: deb
     uris: "{{ kubernetes_apt_repository }}"
     suites: /
     signed_by: "{{ kubernetes_apt_repository }}/Release.key"

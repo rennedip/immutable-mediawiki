@@ -5,7 +5,7 @@
     name: docker
     type: deb
     uris: "{{ docker_apt_repository }}"
-    suites: trixie
+    suites: "{{ ansible_distribution_release }}"
     components: stable
     signed_by: "{{ docker_apt_repository }}/gpg"
 

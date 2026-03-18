@@ -43,5 +43,3 @@ spec:
         - name: apache-config
           configMap:
             name: apache-config
-
-

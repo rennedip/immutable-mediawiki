@@ -29,7 +29,6 @@
 - name: Allow DNS
   community.general.ufw:
     port: 53
-    proto: tcp
     rule: allow
   notify: Restart ufw
 
