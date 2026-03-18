@@ -1,0 +1,8 @@
+---
+
+collections:
+- name: digitalocean.cloud
+  version: 1.9.0
+- name: https://github.com/kubernetes-sigs/kubespray
+  type: git
+  version: e979e770f2bb1e6f5e8cb178617f2459e880e30e

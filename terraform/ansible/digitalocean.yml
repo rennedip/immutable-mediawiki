@@ -1,0 +1,32 @@
+plugin: digitalocean.cloud.droplets
+attributes:
+  - id
+  - memory
+  - vcpus
+  - disk
+  - locked
+  - status
+  - kernel
+  - created_at
+  - features
+  - backup_ids
+  - next_backup_window
+  - snapshot_ids
+  - image
+  - volume_ids
+  - size
+  - size_slug
+  - networks
+  - region
+  - tags
+  - vpc_uuid
+compose:
+  ansible_host: networks.v4 | selectattr("type", "eq", "public") | map(attribute="ip_address") | first
+  class: size.description | lower
+  distribution: image.distribution | lower
+keyed_groups:
+  - key: do_tags
+  - key: region.slug
+    prefix: region
+    separator: "_"
+leading_separator: false

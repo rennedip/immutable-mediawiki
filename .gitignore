@@ -1,1 +1,14 @@
+# Terraform
+.terraform/
+*.tfplan
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+
+# Ansible
+collections/
+
+# Other
 NOTES.MD
+sandbox/
