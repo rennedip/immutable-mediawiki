@@ -12,31 +12,43 @@ spec:
       labels:
         app: mediawiki
     spec:
+      serviceAccountName: service-account
+      initContainers:
+        - name: init-mediawiki
+          image: dhi.io/mediawiki:1.45.1-debian13-php-fpm-dev
+          command:
+            - sh
+            - -c
+            - |
+                if [ ! -f /data/LocalSettings.php ]; then
+                  cp -r /var/www/html/* /data/
+                fi
+          volumeMounts:
+            - name: document-root
+              mountPath: /data
       containers:
         - name: mediawiki
-          image: dhi.io/mediawiki:1.45.1-debian13-php-fpm
+          image: dhi.io/mediawiki:1.45.1-debian13-php-fpm-dev
           volumeMounts:
             - name: document-root
               mountPath: /var/www/html
-            - name: data
-              mountPath: /var/www/data
             - name: mw-config
               subPath: config
               mountPath: /var/www/html/LocalSettings.php
               readOnly: true
         - name: apache
-          image: dhi.io/httpd:2.4.66-debian13
+          image: dhi.io/httpd:2.4.66-debian13-dev
           volumeMounts:
             - name: document-root
               mountPath: /var/www/html
+            - name: apache-config
+              subPath: config
+              mountPath: /usr/local/apache2/conf/httpd.conf
               readOnly: true
       volumes:
         - name: document-root
           persistentVolumeClaim:
             claimName: document-root
-        - name: data
-          persistentVolumeClaim:
-            claimName: data
         - name: mw-config
           configMap:
             name: mw-config
