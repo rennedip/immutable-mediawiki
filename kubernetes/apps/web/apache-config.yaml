@@ -281,6 +281,7 @@ data:
     # container, that host's errors will be logged there and not here.
     #
     ErrorLog /proc/self/fd/2
+    CustomLog /proc/self/fd/1 combined
 
     #
     # LogLevel: Control the number of messages logged to the error_log.
@@ -515,7 +516,7 @@ data:
     SSLRandomSeed connect builtin
     </IfModule>
 
-    <VirtualHost *:80>
+    <VirtualHost *:8080>
       ServerName localhost
       DocumentRoot /var/www
 
@@ -523,7 +524,7 @@ data:
       RewriteEngine On
       RewriteCond %{REQUEST_FILENAME} !-f
       RewriteCond %{REQUEST_FILENAME} !-d
-      RewriteRule ^/?wiki(/.*)?$ %{DOCUMENT_ROOT}/html/index.php [L,QSA]
+      RewriteRule ^/?html(/.*)?$ %{DOCUMENT_ROOT}/html/index.php [L,QSA]
       RewriteRule ^/*$ %{DOCUMENT_ROOT}/html/index.php [L,QSA]
 
       # Security

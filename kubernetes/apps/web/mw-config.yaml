@@ -21,8 +21,6 @@ data:
       exit;
     }
 
-    require_once "{{ mediawiki_private_config_dir }}/PrivateSettings.php";
-
     ## Uncomment this to disable output compression
     # $wgDisableOutputCompression = true;
 
@@ -55,7 +53,7 @@ data:
       $wgActionPaths[$action] = "$wgArticlePath?action=$action";
     }
     $wgUsePathInfo = true;
-    $wgServer = "https://wiki.{{ apache_server_name }}";
+    $wgServer = "http://localhost";
     $wgResourceBasePath = $wgScriptPath;
 
     ## The URL paths to the logo.  Make sure you change this from the default,
