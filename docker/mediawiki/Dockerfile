@@ -1,8 +1,8 @@
 FROM dhi.io/python:3.14-debian13-dev AS build
 COPY src /opt/build
 WORKDIR /opt/build
-RUN apt-get update && apt-get install -y git
-RUN pip install -r requirements.txt
+RUN apt-get update && apt-get install -y --no-install-recommends git=1:2.47.3-0
+RUN pip install --no-cache-dir -r requirements.txt
 RUN python /opt/build/install.py
 
 FROM dhi.io/httpd:2.4.66-debian13 AS release
