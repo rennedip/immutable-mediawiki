@@ -1,8 +1,7 @@
 ---
 
 repo: "https://gerrit.wikimedia.org/r/mediawiki/core.git"
-version: "1.45"
-minor_version: "1.45.1"
+version: "1.45.1"
 extensions:
   Citizen:
     repo: "https://github.com/StarCitizenTools/mediawiki-skins-Citizen"
