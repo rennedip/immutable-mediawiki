@@ -1,0 +1,18 @@
+---
+
+repo: "https://gerrit.wikimedia.org/r/mediawiki/core.git"
+version: "1.45"
+minor_version: "1.45.1"
+extensions:
+  Citizen:
+    repo: "https://github.com/StarCitizenTools/mediawiki-skins-Citizen"
+    version: main
+    dest: skins/Citizen
+  Cosmos:
+    repo: "https://github.com/wikimedia/mediawiki-skins-Cosmos"
+    version: master
+    dest: skins/Cosmos
+  PortableInfobox:
+    repo: "https://github.com/Universal-Omega/PortableInfobox"
+    version: main
+    dest: extensions/PortableInfobox

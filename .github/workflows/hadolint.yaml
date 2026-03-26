@@ -1,0 +1,25 @@
+name: hadolint
+on:
+  push:
+    branches:
+      - main
+      - dev
+jobs:
+  lint:
+    name: Hadolint
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        project:
+          - apache
+          - mediawiki
+          - mysql
+    defaults:
+      run:
+        working-directory: ./docker/${{ matrix.project }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Run Hadolint
+        uses: hadolint/hadolint-action@v3.1.0

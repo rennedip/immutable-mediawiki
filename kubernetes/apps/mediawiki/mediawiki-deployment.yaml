@@ -28,22 +28,13 @@ spec:
               mountPath: /data
       containers:
         - name: mediawiki
-          image: dhi.io/mediawiki:1.45.1-debian13-php-fpm-dev
+          image: ghcr.io/clofour/mediawiki:main
           volumeMounts:
             - name: document-root
               mountPath: /var/www/html
             - name: mw-config
               subPath: config
               mountPath: /var/www/html/LocalSettings.php
-              readOnly: true
-        - name: apache
-          image: dhi.io/httpd:2.4.66-debian13-dev
-          volumeMounts:
-            - name: document-root
-              mountPath: /var/www/html
-            - name: apache-config
-              subPath: config
-              mountPath: /usr/local/apache2/conf/httpd.conf
               readOnly: true
       volumes:
         - name: document-root
