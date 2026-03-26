@@ -7,6 +7,10 @@ build_dir_path = os.environ.get("BUILD_DIR")
 config_path = os.path.join(build_dir_path, "config.yaml")
 mediawiki_dir_path = os.environ.get("MEDIAWIKI_DIR")
 
+assert build_dir_path, "The build directory is not defined."
+assert config_path, "The configuration directory could not be resolved."
+assert mediawiki_dir_path, "The mediawiki directory is not defined."
+
 with open(config_path, "r") as file:
     config = yaml.safe_load(file)
 
@@ -14,7 +18,7 @@ mediawiki_repo = Repo.clone_from(
     url=config["repo"], 
     to_path=mediawiki_dir_path,
     multi_options=[
-        f"--depth 1",
+        "--depth 1",
         f"--branch {config["version"]}"
     ]
 )
@@ -26,7 +30,7 @@ for extensionName, extension in config["extensions"].items():
         url=extension["repo"],
         to_path=extension_path,
         multi_options=[
-            f"--depth 1",
+            "--depth 1",
             f"--branch {extension["version"]}"
         ]
     )
