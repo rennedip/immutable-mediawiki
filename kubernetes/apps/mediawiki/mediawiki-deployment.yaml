@@ -15,7 +15,7 @@ spec:
       serviceAccountName: service-account
       containers:
         - name: mediawiki
-          image: ghcr.io/clofour/mediawiki:main
+          image: ghcr.io/rennedip/mediawiki:main
           volumeMounts:
             - name: images
               mountPath: /var/www/html/images
