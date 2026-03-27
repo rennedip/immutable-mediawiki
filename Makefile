@@ -3,10 +3,10 @@
 test:
 	kind create cluster --name test
 	kubectl create secret generic regcred --from-file=.dockerconfigjson=$HOME/.docker/config.json --type=kubernetes.io/dockerconfigjson
-	cd ./kubernetes/apps/web && kubectl apply -f .
+	cd ./kubernetes/apps/mediawiki && kubectl apply -f .
 
 testprune:
-	cd ./kubernetes/apps/web && kubectl apply --prune --all -f .
+	cd ./kubernetes/apps/mediawiki && kubectl apply --prune --all -f .
 
 init:
 	cd ./terraform && terraform init
